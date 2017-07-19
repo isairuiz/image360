@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CirclePageIndicator mIndicator;
     public Context context;
-
+    private Button correo_btn;
+    private Button imagen_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +66,16 @@ public class MainActivity extends AppCompatActivity {
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
 
+        correo_btn = (Button)findViewById(R.id.enviar_correo_btn);
+        imagen_btn = (Button)findViewById(R.id.imagen_360_btn);
 
-
-
+        imagen_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,Image360Activity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -185,18 +193,11 @@ public class MainActivity extends AppCompatActivity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             int currentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
-            Button correo_btn = (Button)rootView.findViewById(R.id.enviar_correo_btn);
-            Button imagen_btn = (Button)rootView.findViewById(R.id.imagen_360_btn);
+
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
             image.setImageResource(backgrounds[currentPosition - 1]);
             int realPos = currentPosition - 1;
-            imagen_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(fragmentContext,Image360Activity.class);
-                    startActivity(intent);
-                }
-            });
+
             return rootView;
         }
     }

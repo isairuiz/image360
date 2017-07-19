@@ -3,6 +3,8 @@ package com.importare.image360;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.vr.ndk.base.AndroidCompat;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
@@ -43,6 +46,8 @@ public class Image360Activity extends AppCompatActivity {
         setContentView(R.layout.activity_image360);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        AndroidCompat.setVrModeEnabled(this,true);
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
@@ -130,15 +135,11 @@ public class Image360Activity extends AppCompatActivity {
             InputStream istr = null;
             if (fileInformation == null || fileInformation.length < 1
                     || fileInformation[0] == null || fileInformation[0].first == null) {
-                AssetManager assetManager = getAssets();
-                try {
-                    istr = assetManager.open("andes.jpg");
-                    panoOptions = new Options();
-                    panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not decode default bitmap: " + e);
-                    return false;
-                }
+                //AssetManager assetManager = getAssets();
+                //istr = assetManager.open("andes.jpg");
+                istr = Image360Activity.this.getResources().openRawResource(R.drawable.andes);
+                panoOptions = new Options();
+                panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
             } else {
                 try {
                     istr = new FileInputStream(new File(fileInformation[0].first.getPath()));

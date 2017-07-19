@@ -42,4 +42,21 @@
         android:layout_gravity="bottom"
         />
 
+
+    <Button
+        android:id="@+id/enviar_correo_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar Correo"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <Button
+        android:id="@+id/imagen_360_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Imagen 360"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"/>
+
 </android.support.design.widget.CoordinatorLayout>
