@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
+
         mIndicator.setViewPager(mViewPager);
 
         correo_btn = (Button)findViewById(R.id.enviar_correo_btn);
@@ -124,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 10 total pages.
-            return 10;
+            // Show 11 total pages.
+            return 11;
         }
 
         @Override
@@ -205,11 +206,11 @@ public class MainActivity extends AppCompatActivity {
             int realPos = currentPosition - 1;
             Log.e("OC","position + 1:"+currentPosition);
             Log.e("OC","position real?:"+realPos);
-            /*if(realPos == 0){
+            if(realPos == 0 || realPos == 1 || realPos == 2){
                 btn_hide.setVisibility(View.VISIBLE);
             }else{
                 btn_hide.setVisibility(View.INVISIBLE);
-            }*/
+            }
 
             return rootView;
         }

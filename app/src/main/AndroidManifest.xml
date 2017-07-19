@@ -23,6 +23,7 @@
         <activity
             android:name=".Image360Activity"
             android:label="@string/title_activity_image360"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
