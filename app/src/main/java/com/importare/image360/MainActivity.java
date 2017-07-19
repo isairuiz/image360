@@ -205,11 +205,11 @@ public class MainActivity extends AppCompatActivity {
             int realPos = currentPosition - 1;
             Log.e("OC","position + 1:"+currentPosition);
             Log.e("OC","position real?:"+realPos);
-            if(realPos == 0){
+            /*if(realPos == 0){
                 btn_hide.setVisibility(View.VISIBLE);
             }else{
                 btn_hide.setVisibility(View.INVISIBLE);
-            }
+            }*/
 
             return rootView;
         }
