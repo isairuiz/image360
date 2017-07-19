@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.importare.image360.MainActivity$PlaceholderFragment">
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
+
+
+    <Button
+        android:id="@+id/enviar_correo_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar Correo"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <Button
+        android:id="@+id/imagen_360_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Imagen 360"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/enviar_correo_btn"
+        android:layout_margin="@dimen/fab_margin"/>
+
+</RelativeLayout>
