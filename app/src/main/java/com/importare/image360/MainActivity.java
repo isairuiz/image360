@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position + 1,imagen_btn);
         }
 
         @Override
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
                 R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10};
 
-        private Context fragmentContext = this.getContext();
+        private Button btn_hide;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -177,15 +178,20 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static PlaceholderFragment newInstance(int sectionNumber, Button btn_image) {
+            PlaceholderFragment fragment = new PlaceholderFragment(btn_image);
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
 
+        public PlaceholderFragment(Button btn_image) {
+            this.btn_hide = btn_image;
+        }
+
         public PlaceholderFragment() {
+
         }
 
         @Override
@@ -197,6 +203,13 @@ public class MainActivity extends AppCompatActivity {
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
             image.setImageResource(backgrounds[currentPosition - 1]);
             int realPos = currentPosition - 1;
+            Log.e("OC","position + 1:"+currentPosition);
+            Log.e("OC","position real?:"+realPos);
+            if(realPos == 0){
+                btn_hide.setVisibility(View.VISIBLE);
+            }else{
+                btn_hide.setVisibility(View.INVISIBLE);
+            }
 
             return rootView;
         }
