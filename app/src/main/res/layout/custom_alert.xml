@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <EditText
+        android:id="@+id/correo_nombre"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:hint="Nombre"
+        />
+    <EditText
+        android:id="@+id/correo_mail"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:hint="Correo"
+        android:layout_below="@+id/correo_nombre"
+        />
+
+    <EditText
+        android:id="@+id/correo_empresa"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:hint="Empresa"
+        android:layout_below="@+id/correo_mail"
+        />
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/paises_array"
+        android:prompt="@string/elige_pais"
+        android:layout_below="@+id/correo_empresa"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="125dp"
+        android:text="Enviar"/>
+</RelativeLayout>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.importare.image360.Image360Activity">
 
-    <android.support.design.widget.AppBarLayout
+    <!--<android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -18,13 +18,13 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>-->
 
     <com.google.vr.sdk.widgets.pano.VrPanoramaView
         android:id="@+id/pano_view"
         android:layout_width="match_parent"
-        android:layout_height="250dip"
-        android:layout_marginTop="100dip"
+        android:layout_height="match_parent"
+        android:layout_margin="10dip"
         android:scrollbars="none" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.importare.image360;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -52,8 +53,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
 
         context = this;
         // Create the adapter that will return a fragment for each of the three
@@ -64,8 +73,29 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("OC","Pocision: "+position);
+                if(position == 0){
+                    imagen_btn.setVisibility(View.VISIBLE);
+                }else{
+                    imagen_btn.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
 
         correo_btn = (Button)findViewById(R.id.enviar_correo_btn);
@@ -78,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void createAlert(){
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_alert);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
     }
 
 
@@ -104,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -120,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1,imagen_btn);
+            return PlaceholderFragment.newInstance(position,imagen_btn);
         }
 
         @Override
@@ -200,18 +234,14 @@ public class MainActivity extends AppCompatActivity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             int currentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
-
+            int imageId = backgrounds[currentPosition];
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
-            image.setImageResource(backgrounds[currentPosition - 1]);
-            int realPos = currentPosition - 1;
-            Log.e("OC","position + 1:"+currentPosition);
-            Log.e("OC","position real?:"+realPos);
-            if(realPos == 0 || realPos == 1 || realPos == 2){
+            image.setImageResource(imageId);
+            /*if(imageId == R.drawable.portada){
                 btn_hide.setVisibility(View.VISIBLE);
             }else{
                 btn_hide.setVisibility(View.INVISIBLE);
-            }
-
+            }*/
             return rootView;
         }
     }
