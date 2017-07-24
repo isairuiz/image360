@@ -46,18 +46,20 @@ public class Image360Activity extends AppCompatActivity {
         setContentView(R.layout.activity_image360);
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        );
         AndroidCompat.setVrModeEnabled(this,true);
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
-        panoWidgetView.setEventListener(new ActivityEventListener());
+
+        panoWidgetView.setFullscreenButtonEnabled(false);
+        panoWidgetView.setEventListener(new VrPanoramaEventListener(){
+            @Override
+            public void onDisplayModeChanged(int newDisplayMode){
+                Log.d("activity360", "displayMode cambiado a " + newDisplayMode);
+                super.onDisplayModeChanged(newDisplayMode);
+                irFullScreen();
+            }
+        });
+
 
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
@@ -71,6 +73,17 @@ public class Image360Activity extends AppCompatActivity {
         setIntent(intent);
         // Load the new image.
         handleIntent(intent);
+    }
+
+    private void irFullScreen(){
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
     }
 
 
@@ -115,6 +128,7 @@ public class Image360Activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         panoWidgetView.resumeRendering();
+        irFullScreen();
     }
 
     @Override

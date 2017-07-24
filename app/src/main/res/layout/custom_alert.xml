@@ -9,8 +9,9 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:hint="Nombre"
+        android:layout_centerHorizontal="true"
         />
     <EditText
         android:id="@+id/correo_mail"
@@ -19,6 +20,7 @@
         android:paddingLeft="10dp"
         android:hint="Correo"
         android:layout_below="@+id/correo_nombre"
+        android:layout_centerHorizontal="true"
         />
 
     <EditText
@@ -28,6 +30,7 @@
         android:paddingLeft="10dp"
         android:hint="Empresa"
         android:layout_below="@+id/correo_mail"
+        android:layout_centerHorizontal="true"
         />
     <Spinner
         android:id="@+id/spinner1"
@@ -37,13 +40,18 @@
         android:prompt="@string/elige_pais"
         android:layout_below="@+id/correo_empresa"
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="10dp"
+        android:layout_centerHorizontal="true"/>
+
 
     <Button
+        android:id="@+id/enviar_btn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner1"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="125dp"
-        android:text="Enviar"/>
+        android:text="Enviar"
+        android:layout_centerHorizontal="true"
+        />
 </RelativeLayout>

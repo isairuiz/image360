@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -47,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
     public Context context;
     private Button correo_btn;
     private Button imagen_btn;
+    private int currentPage = 0;
+    private static final int[] filesToAttach = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
+            R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
+            R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10};
+
+    private String Mail_Nombre = "";
+    private String Mail_Correo = "";
+    private String Mail_Empresa = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        );
+
 
         context = this;
         // Create the adapter that will return a fragment for each of the three
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.e("OC","Pocision: "+position);
+                currentPage = position;
                 if(position == 0){
                     imagen_btn.setVisibility(View.VISIBLE);
                 }else{
@@ -108,12 +113,70 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        correo_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAlert();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("activity", "resumiendo");
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
     }
 
     private void createAlert(){
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_alert);
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button enviar_btn = (Button) dialog.findViewById(R.id.enviar_btn);
+        final EditText nombre_edit = (EditText) dialog.findViewById(R.id.correo_nombre);
+        final EditText correo_edit = (EditText) dialog.findViewById(R.id.correo_mail);
+        final EditText empresa_edit = (EditText) dialog.findViewById(R.id.correo_empresa);
+        enviar_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isValid = validateEdits(nombre_edit,correo_edit,empresa_edit);
+                if(isValid){
+
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private boolean validateEdits(EditText nombre_edit, EditText correo_edit, EditText empresa_edit){
+        String nombre = nombre_edit.getText().toString();
+        String mail = correo_edit.getText().toString();
+        String empresa = empresa_edit.getText().toString();
+        String errors = "Campos requeridos: ";
+        boolean hasError = false;
+        if(TextUtils.isEmpty(nombre)){
+            hasError = true;
+            errors += "Nombre\n";
+        }
+        if(TextUtils.isEmpty(mail)){
+            hasError = true;
+            errors += ", Correo\n";
+        }
+        if(TextUtils.isEmpty(empresa)){
+            errors += ", empresa\n";
+            hasError = true;
+        }
+        if(hasError){
+            Toast.makeText(context, errors, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
 
@@ -154,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position,imagen_btn);
+            return PlaceholderFragment.newInstance(position);
         }
 
         @Override
@@ -213,16 +276,12 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber, Button btn_image) {
-            PlaceholderFragment fragment = new PlaceholderFragment(btn_image);
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
-        }
-
-        public PlaceholderFragment(Button btn_image) {
-            this.btn_hide = btn_image;
         }
 
         public PlaceholderFragment() {
@@ -237,11 +296,6 @@ public class MainActivity extends AppCompatActivity {
             int imageId = backgrounds[currentPosition];
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
             image.setImageResource(imageId);
-            /*if(imageId == R.drawable.portada){
-                btn_hide.setVisibility(View.VISIBLE);
-            }else{
-                btn_hide.setVisibility(View.INVISIBLE);
-            }*/
             return rootView;
         }
     }
