@@ -1,10 +1,20 @@
 package com.importare.image360;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,13 +31,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.List;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String Mail_Nombre = "";
     private String Mail_Correo = "";
     private String Mail_Empresa = "";
+    private String Mail_Pais = "";
 
 
     @Override
@@ -119,8 +141,49 @@ public class MainActivity extends AppCompatActivity {
                 createAlert();
             }
         });
-    }
 
+        requestPermisions();
+    }
+    private void requestPermisions(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -142,34 +205,40 @@ public class MainActivity extends AppCompatActivity {
         final EditText nombre_edit = (EditText) dialog.findViewById(R.id.correo_nombre);
         final EditText correo_edit = (EditText) dialog.findViewById(R.id.correo_mail);
         final EditText empresa_edit = (EditText) dialog.findViewById(R.id.correo_empresa);
+        final Spinner countrySpinner = (Spinner) dialog.findViewById(R.id.spinner1);
+
         enviar_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isValid = validateEdits(nombre_edit,correo_edit,empresa_edit);
+                boolean isValid = validateEdits(nombre_edit,correo_edit,empresa_edit,countrySpinner);
                 if(isValid){
-
+                    createEmailIntent();
                 }
             }
         });
         dialog.show();
     }
 
-    private boolean validateEdits(EditText nombre_edit, EditText correo_edit, EditText empresa_edit){
+    private boolean validateEdits(EditText nombre_edit, EditText correo_edit, EditText empresa_edit, Spinner spinner){
         String nombre = nombre_edit.getText().toString();
         String mail = correo_edit.getText().toString();
         String empresa = empresa_edit.getText().toString();
-        String errors = "Campos requeridos: ";
+        Mail_Nombre = nombre;
+        Mail_Correo = mail;
+        Mail_Empresa = empresa;
+        Mail_Pais = spinner.getSelectedItem().toString();
+        String errors = "Campos requeridos: \n";
         boolean hasError = false;
         if(TextUtils.isEmpty(nombre)){
             hasError = true;
-            errors += "Nombre\n";
+            errors += "-Nombre\n";
         }
         if(TextUtils.isEmpty(mail)){
             hasError = true;
-            errors += ", Correo\n";
+            errors += "-Correo\n";
         }
         if(TextUtils.isEmpty(empresa)){
-            errors += ", empresa\n";
+            errors += "-empresa\n";
             hasError = true;
         }
         if(hasError){
@@ -177,6 +246,87 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void createEmailIntent(){
+        String nameImage = getDrawableName();
+        //Resources resources = context.getResources();
+        int idImage = filesToAttach[currentPage];
+        createExternalImage(idImage,nameImage);
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("application/image");
+        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), nameImage+".jpg")));
+        i.putExtra(Intent.EXTRA_EMAIL, new String[] {
+                Mail_Correo
+        });
+        i.putExtra(Intent.EXTRA_SUBJECT, "Imagen 360 con archivo.");
+        i.putExtra(Intent.EXTRA_TEXT, "Enviando esta imagen desde app a "+Mail_Nombre+ " de la empresa "+Mail_Empresa+" y pais "+Mail_Pais);
+
+        startActivity(createEmailOnlyChooserIntent(i, "Send via email"));
+    }
+
+    private String getDrawableName(){
+        String nameRes = getResources().getResourceEntryName(filesToAttach[currentPage]);
+        return nameRes;
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException
+    {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1)
+        {
+            out.write(buffer, 0, read);
+        }
+    }
+
+    private void createExternalImage(int idImage, String name){
+        InputStream in = null;
+        OutputStream out = null;
+        try
+        {
+            in = getResources().openRawResource(idImage);
+            out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), name+".jpg"));
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        }
+        catch (Exception e)
+        {
+            Log.e("tag", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public Intent createEmailOnlyChooserIntent(Intent source,
+                                               CharSequence chooserTitle) {
+        Stack<Intent> intents = new Stack<Intent>();
+        Intent i = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",
+                "info@domain.com", null));
+        List<ResolveInfo> activities = getPackageManager()
+                .queryIntentActivities(i, 0);
+
+        for(ResolveInfo ri : activities) {
+            Intent target = new Intent(source);
+            target.setPackage(ri.activityInfo.packageName);
+            intents.add(target);
+        }
+
+        if(!intents.isEmpty()) {
+            Intent chooserIntent = Intent.createChooser(intents.remove(0),
+                    chooserTitle);
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                    intents.toArray(new Parcelable[intents.size()]));
+
+            return chooserIntent;
+        } else {
+            return Intent.createChooser(source, chooserTitle);
+        }
     }
 
 
