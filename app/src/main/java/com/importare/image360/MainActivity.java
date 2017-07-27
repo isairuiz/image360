@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CirclePageIndicator mIndicator;
     public Context context;
-    private Button correo_btn;
-    private Button imagen_btn;
+
+    private ImageView imagen_btn;
     private int currentPage = 0;
     private static final int[] filesToAttach = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
             R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
@@ -128,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
         mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
 
-        correo_btn = (Button)findViewById(R.id.enviar_correo_btn);
-        imagen_btn = (Button)findViewById(R.id.imagen_360_btn);
+
+
+        imagen_btn = (ImageView)findViewById(R.id.imagen_360_btn);
 
         imagen_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,12 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        correo_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAlert();
-            }
-        });
+
 
         requestPermisions();
     }
@@ -465,11 +461,19 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
             int currentPosition = getArguments().getInt(ARG_SECTION_NUMBER);
             int imageId = backgrounds[currentPosition];
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
             image.setImageResource(imageId);
-            //((MainActivity)getActivity()).hacerFullscreen();
+            ImageView correo_btn = (ImageView) rootView.findViewById(R.id.enviar_correo_btn);
+            correo_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)getActivity()).createAlert();
+                }
+            });
+
             return rootView;
         }
     }
