@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -31,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private int currentPage = 0;
     private static final int[] filesToAttach = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
             R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
-            R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10};
+            R.drawable.image7,R.drawable.image8,R.drawable.image9};
 
     private String Mail_Nombre = "";
     private String Mail_Correo = "";
@@ -188,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("activity", "resumiendo");
+        hacerFullscreen();
+    }
+
+    private void hacerFullscreen(){
+        Log.d("activity", "haciendo fullscreen");
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -200,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createAlert(){
         final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_alert);
         Button enviar_btn = (Button) dialog.findViewById(R.id.enviar_btn);
         final EditText nombre_edit = (EditText) dialog.findViewById(R.id.correo_nombre);
@@ -216,6 +225,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override public void onShow(DialogInterface dialogInterface){
+                hacerFullscreen();
+            }
+        });
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface dialogInterface){
+                hacerFullscreen();
+            }
+        });
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override public void onCancel(DialogInterface dialogInterface){
+                hacerFullscreen();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.argb(128,128,128,128)));
         dialog.show();
     }
 
@@ -373,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 11 total pages.
-            return 11;
+            return 10;
         }
 
         @Override
@@ -399,8 +424,6 @@ public class MainActivity extends AppCompatActivity {
                     return "SECTION 9";
                 case 9:
                     return "SECTION 10";
-                case 10:
-                    return "SECTION 11";
             }
             return null;
         }
@@ -416,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
          */
         private static final int[] backgrounds = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
                 R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
-                R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10};
+                R.drawable.image7,R.drawable.image8,R.drawable.image9};
 
         private Button btn_hide;
 
@@ -446,6 +469,7 @@ public class MainActivity extends AppCompatActivity {
             int imageId = backgrounds[currentPosition];
             ImageView image = (ImageView) rootView.findViewById(R.id.background_image);
             image.setImageResource(imageId);
+            //((MainActivity)getActivity()).hacerFullscreen();
             return rootView;
         }
     }
