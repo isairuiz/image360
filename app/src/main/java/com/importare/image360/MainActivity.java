@@ -2,23 +2,18 @@ package com.importare.image360;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,12 +29,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -49,7 +42,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.List;
 import java.util.Stack;
 
@@ -75,14 +67,70 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView imagen_btn;
     private int currentPage = 0;
-    private static final int[] filesToAttach = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
-            R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
-            R.drawable.image7,R.drawable.image8,R.drawable.image9};
+    private static final int[] filesToAttach = {R.drawable.biossmannportada,R.drawable.biossmann1,R.drawable.biossmann2,
+            R.drawable.biossmann3,R.drawable.biossmann4,R.drawable.biossmann5,R.drawable.biossmann6,
+            R.drawable.biossmann7,R.drawable.biossmann8,R.drawable.biossmann9};
+    private static final String[] codigosPaises = {"MX","US","AR","BO","CL","CO"};
+    private static final String[][] bccMails = {
+            {"correo01@company.com",
+                    "correo02@company.com",
+                    "correo03@company.com",
+                    "correo04@company.com",
+                    "correo05@company.com"},
+            {"correo11@company.com",
+                    "correo12@company.com",
+                    "correo13@company.com",
+                    "correo14@company.com",
+                    "correo15@company.com"},
+            {"correo21@company.com",
+                    "correo22@company.com",
+                    "correo23@company.com",
+                    "correo24@company.com",
+                    "correo25@company.com"},
+            {"correo31@company.com",
+                    "correo32@company.com",
+                    "correo33@company.com",
+                    "correo34@company.com",
+                    "correo35@company.com"},
+            {"correo41@company.com",
+                    "correo42@company.com",
+                    "correo43@company.com",
+                    "correo44@company.com",
+                    "correo45@company.com"},
+            {"correo51@company.com",
+                    "correo52@company.com",
+                    "correo53@company.com",
+                    "correo54@company.com",
+                    "correo55@company.com"},
+            {"correo61@company.com",
+                    "correo62@company.com",
+                    "correo63@company.com",
+                    "correo64@company.com",
+                    "correo65@company.com"},
+            {"correo51@company.com",
+                    "correo72@company.com",
+                    "correo73@company.com",
+                    "correo74@company.com",
+                    "correo75@company.com"},
+            {"correo51@company.com",
+                    "correo82@company.com",
+                    "correo83@company.com",
+                    "correo84@company.com",
+                    "correo85@company.com"},
+            {"correo91@company.com",
+                    "correo92@company.com",
+                    "correo93@company.com",
+                    "correo94@company.com",
+                    "correo95@company.com"}
+
+
+    };
 
     private String Mail_Nombre = "";
     private String Mail_Correo = "";
     private String Mail_Empresa = "";
     private String Mail_Pais = "";
+    private String Mail_Code = "";
 
 
     @Override
@@ -236,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 hacerFullscreen();
             }
         });
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.argb(128,128,128,128)));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.argb(170,128,128,128)));
         dialog.show();
     }
 
@@ -248,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
         Mail_Correo = mail;
         Mail_Empresa = empresa;
         Mail_Pais = spinner.getSelectedItem().toString();
+        int paisPosition = spinner.getSelectedItemPosition();
+        Mail_Code = codigosPaises[paisPosition];
         String errors = "Campos requeridos: \n";
         boolean hasError = false;
         if(TextUtils.isEmpty(nombre)){
@@ -257,6 +307,13 @@ public class MainActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(mail)){
             hasError = true;
             errors += "-Correo\n";
+        }else{
+            /*validar email*/
+            boolean isValid = isValidEmail(Mail_Correo);
+            if(!isValid){
+                hasError = true;
+                errors += "-El correo no es valido\n";
+            }
         }
         if(TextUtils.isEmpty(empresa)){
             errors += "-empresa\n";
@@ -269,26 +326,41 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public final static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
     private void createEmailIntent(){
-        String nameImage = getDrawableName();
-        //Resources resources = context.getResources();
-        int idImage = filesToAttach[currentPage];
-        createExternalImage(idImage,nameImage);
 
         Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("application/image");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), nameImage+".jpg")));
+
+        if(currentPage != 0){
+            i.setType("application/image");
+            int idImage = filesToAttach[currentPage];
+            String nameImage = getDrawableName(idImage);
+            createExternalFile(idImage,nameImage,"jpg");
+            i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), nameImage+".jpg")));
+        }else{
+            i.setType("application/pdf");
+            int idFile = R.raw.dummypdf;
+            String fileName = getDrawableName(idFile);
+            createExternalFile(idFile,fileName,"pdf");
+            i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName+".pdf")));
+        }
+
         i.putExtra(Intent.EXTRA_EMAIL, new String[] {
                 Mail_Correo
         });
-        i.putExtra(Intent.EXTRA_SUBJECT, "Imagen 360 con archivo.");
-        i.putExtra(Intent.EXTRA_TEXT, "Enviando esta imagen desde app a "+Mail_Nombre+ " de la empresa "+Mail_Empresa+" y pais "+Mail_Pais);
+        i.putExtra(Intent.EXTRA_BCC, bccMails[currentPage]);
+        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+        i.putExtra(Intent.EXTRA_TEXT, "Enviando imagen a "+Mail_Nombre+
+                " de la empresa "+Mail_Empresa+" y pais "+Mail_Pais + " con codigo "+ Mail_Code);
 
         startActivity(createEmailOnlyChooserIntent(i, "Send via email"));
     }
 
-    private String getDrawableName(){
-        String nameRes = getResources().getResourceEntryName(filesToAttach[currentPage]);
+    private String getDrawableName(int id){
+        String nameRes = getResources().getResourceEntryName(id);
         return nameRes;
     }
 
@@ -302,13 +374,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void createExternalImage(int idImage, String name){
+    private void createExternalFile(int idImage, String name, String ext){
         InputStream in = null;
         OutputStream out = null;
         try
         {
             in = getResources().openRawResource(idImage);
-            out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), name+".jpg"));
+            out = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), name+"."+ext));
             copyFile(in, out);
             in.close();
             in = null;
@@ -433,9 +505,9 @@ public class MainActivity extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final int[] backgrounds = {R.drawable.portada,R.drawable.image1,R.drawable.image2,
-                R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,
-                R.drawable.image7,R.drawable.image8,R.drawable.image9};
+        private static final int[] backgrounds = {R.drawable.biossmannportada,R.drawable.biossmann1,R.drawable.biossmann2,
+                R.drawable.biossmann3,R.drawable.biossmann4,R.drawable.biossmann5,R.drawable.biossmann6,
+                R.drawable.biossmann7,R.drawable.biossmann8,R.drawable.biossmann9};
 
         private Button btn_hide;
 

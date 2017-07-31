@@ -24,7 +24,6 @@
         android:id="@+id/pano_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dip"
         android:scrollbars="none" />
 
 </android.support.design.widget.CoordinatorLayout>

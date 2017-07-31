@@ -9,30 +9,29 @@
         android:id="@+id/correo_nombre"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:hint="Nombre"
+        android:hint="@string/nombre_hint"
         android:layout_centerHorizontal="true"
+        style="@style/Textbox"
         />
     <EditText
         android:id="@+id/correo_mail"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:paddingLeft="10dp"
-        android:hint="Correo"
+        android:hint="@string/correo_hint"
         android:layout_below="@+id/correo_nombre"
         android:layout_centerHorizontal="true"
+        style="@style/Textbox"
         />
 
     <EditText
         android:id="@+id/correo_empresa"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:hint="Empresa"
+        android:hint="@string/empresa_hint"
         android:layout_below="@+id/correo_mail"
         android:layout_centerHorizontal="true"
+        style="@style/Textbox"
         />
     <Spinner
         android:id="@+id/spinner1"
@@ -53,7 +52,7 @@
         android:layout_below="@id/spinner1"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="125dp"
-        android:text="Enviar"
+        android:text="@string/send_text"
         android:layout_centerHorizontal="true"
         />
 </RelativeLayout>
