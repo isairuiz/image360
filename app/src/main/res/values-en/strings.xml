@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Catálogo Biossmann</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_image360">Image360Activity</string>
+    <string name="elige_pais">Choose a country</string>
+    <string name="email_subject">Biossmann Catalog (%1$s)(%2$s)</string>
+    <string name="email_body">Hello %1$s \nBiossmann thanks you for visiting our stand on FIME 2017, we\'ll contact you soon to give you information about our products. We invite you to visit our web www.biossmann.com.mx</string>
+    <string name="send_text">Enviar</string>
+    <string name="empresa_hint">Empresa</string>
+    <string name="correo_hint">Correo</string>
+    <string name="nombre_hint">Nombre</string>
+    <string-array name="paises_array">
+        <item>México</item>
+        <item>Estados Unidos</item>
+        <item>Argentina</item>
+        <item>Bolivia</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+    </string-array>
+</resources>
