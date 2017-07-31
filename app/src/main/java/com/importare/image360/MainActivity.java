@@ -74,59 +74,20 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.biossmann3,R.drawable.biossmann4,R.drawable.biossmann5,R.drawable.biossmann6,
             R.drawable.biossmann7,R.drawable.biossmann8,R.drawable.biossmann9};
     private static final String[] codigosPaises = {"MX","US","AR","BO","CL","CO"};
-    private static final String[][] bccMails = {
-            {"correo01@company.com",
-                    "correo02@company.com",
-                    "correo03@company.com",
-                    "correo04@company.com",
-                    "correo05@company.com"},
-            {"correo11@company.com",
-                    "correo12@company.com",
-                    "correo13@company.com",
-                    "correo14@company.com",
-                    "correo15@company.com"},
-            {"correo21@company.com",
-                    "correo22@company.com",
-                    "correo23@company.com",
-                    "correo24@company.com",
-                    "correo25@company.com"},
-            {"correo31@company.com",
-                    "correo32@company.com",
-                    "correo33@company.com",
-                    "correo34@company.com",
-                    "correo35@company.com"},
-            {"correo41@company.com",
-                    "correo42@company.com",
-                    "correo43@company.com",
-                    "correo44@company.com",
-                    "correo45@company.com"},
-            {"correo51@company.com",
-                    "correo52@company.com",
-                    "correo53@company.com",
-                    "correo54@company.com",
-                    "correo55@company.com"},
-            {"correo61@company.com",
-                    "correo62@company.com",
-                    "correo63@company.com",
-                    "correo64@company.com",
-                    "correo65@company.com"},
-            {"correo51@company.com",
-                    "correo72@company.com",
-                    "correo73@company.com",
-                    "correo74@company.com",
-                    "correo75@company.com"},
-            {"correo51@company.com",
-                    "correo82@company.com",
-                    "correo83@company.com",
-                    "correo84@company.com",
-                    "correo85@company.com"},
-            {"correo91@company.com",
-                    "correo92@company.com",
-                    "correo93@company.com",
-                    "correo94@company.com",
-                    "correo95@company.com"}
 
-
+	private static final String[] bccParaTodos = {"tarenas@biossmann.com", "ezama@biossmann.com",
+			"eespinosa@industrialpolaris.com", "handrade@medicus.com.mx", "storres@medicus.com.mx"};
+    private static final String[][] bccMails = { //Se usa la misma lista para todos por lo pronto
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos,
+			bccParaTodos
     };
 
     private String Mail_Nombre = "";
@@ -363,9 +324,10 @@ public class MainActivity extends AppCompatActivity {
                 Mail_Correo
         });
         i.putExtra(Intent.EXTRA_BCC, bccMails[currentPage]);
-        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
-        i.putExtra(Intent.EXTRA_TEXT, "Enviando imagen a "+Mail_Nombre+
-                " de la empresa "+Mail_Empresa+" y pais "+Mail_Pais + " con codigo "+ Mail_Code);
+        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject, Mail_Code, Mail_Empresa));
+        i.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_body, Mail_Nombre) );
+        //i.putExtra(Intent.EXTRA_TEXT, "Enviando imagen a "+Mail_Nombre+
+        //        " de la empresa "+Mail_Empresa+" y pais "+Mail_Pais + " con codigo "+ Mail_Code);
 
         startActivity(createEmailOnlyChooserIntent(i, "Send via email"));
     }
