@@ -34,12 +34,12 @@
 
 
 
-    <com.viewpagerindicator.CirclePageIndicator
+    <com.importare.image360.IconPageIndicator
         android:id="@+id/indicator"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_gravity="bottom"
-        app:radius="20dp"
+        android:layout_marginBottom="10dp"
         />
 
     <RelativeLayout
@@ -51,7 +51,7 @@
             android:id="@+id/imagen_360_btn"
             android:layout_width="137dp"
             android:layout_height="63dp"
-            android:src="@drawable/icon360"
+            android:src="@drawable/selector_360"
             android:layout_marginBottom="30dp"
             android:layout_marginRight="215dp"
             />
