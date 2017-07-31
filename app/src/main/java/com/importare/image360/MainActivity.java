@@ -10,6 +10,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,7 +37,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.viewpagerindicator.CirclePageIndicator;
+//import com.viewpagerindicator.CirclePageIndicator; //CAMBIO se quitó CirclePageIndicator y se puso un customizado IconPageIndicator
+import com.viewpagerindicator.IconPagerAdapter; //CAMBIO agregado a implements del adaptador
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private CirclePageIndicator mIndicator;
+    private IconPageIndicator mIndicator;
     public Context context;
 
     private ImageView imagen_btn;
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
+        mIndicator = (IconPageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
 
 
@@ -240,14 +243,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void hacerFullscreen(){
         Log.d("activity", "haciendo fullscreen");
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        );
+
+        Handler mHandler = new Handler(){ //CAMBIO para asegurar fullscreen después de cerrar Soft Keyboard, se usa delay
+            @Override
+            public void handleMessage(Message msg){
+                if(isFinishing())return;
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                );
+            }
+        };
+        mHandler.sendEmptyMessageDelayed(0,300);
     }
 
     private void createAlert(){
@@ -342,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), nameImage+".jpg")));
         }else{
             i.setType("application/pdf");
-            int idFile = R.raw.dummypdf;
+            int idFile = R.raw.catalogo;
             String fileName = getDrawableName(idFile);
             createExternalFile(idFile,fileName,"pdf");
             i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName+".pdf")));
@@ -445,12 +456,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){ //CAMBIO agregado
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus)
+            hacerFullscreen();
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements IconPagerAdapter { //CAMBIO se agregó implements
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -494,6 +511,11 @@ public class MainActivity extends AppCompatActivity {
                     return "SECTION 10";
             }
             return null;
+        }
+
+        @Override
+        public int getIconResId(int index){ //CAMBIO se agregó esta función (y el resource)
+            return R.drawable.selector_circulo;
         }
     }
 
