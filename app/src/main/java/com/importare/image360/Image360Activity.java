@@ -1,18 +1,12 @@
 package com.importare.image360;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -21,8 +15,6 @@ import com.google.vr.ndk.base.AndroidCompat;
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
-
-import com.google.vr.sdk.widgets.pano.VrPanoramaView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +43,7 @@ public class Image360Activity extends AppCompatActivity {
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
 
         panoWidgetView.setFullscreenButtonEnabled(false);
+        panoWidgetView.setInfoButtonEnabled(false);
         panoWidgetView.setEventListener(new VrPanoramaEventListener(){
             @Override
             public void onDisplayModeChanged(int newDisplayMode){
@@ -158,7 +151,7 @@ public class Image360Activity extends AppCompatActivity {
                     || fileInformation[0] == null || fileInformation[0].first == null) {
                 //AssetManager assetManager = getAssets();
                 //istr = assetManager.open("andes.jpg");
-                istr = Image360Activity.this.getResources().openRawResource(R.drawable.andes);
+                istr = Image360Activity.this.getResources().openRawResource(R.drawable.quirofano);
                 panoOptions = new Options();
                 panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
             } else {

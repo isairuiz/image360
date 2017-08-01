@@ -5,7 +5,7 @@
     <string name="title_activity_image360">Image360Activity</string>
     <string name="elige_pais">Choose a country</string>
     <string name="email_subject">Biossmann Catalog (%1$s)(%2$s)</string>
-    <string name="email_body">Hello %1$s \nBiossmann thanks you for visiting our stand on FIME 2017, we\'ll contact you soon to give you information about our products. We invite you to visit our web www.biossmann.com.mx</string>
+    <string name="email_body">Hello %1$s \nBiossmann appreciates the interest to visit our booth at FIME 2017, soon we will contact you to assist you with information about the products of your interest.  We invite you to visit our website "www.biossmann.com.mx"</string>
     <string name="send_text">Enviar</string>
     <string name="empresa_hint">Empresa</string>
     <string name="correo_hint">Correo</string>
