@@ -1,0 +1,16 @@
+<resources>
+    <!-- Para pantallas de 40 a 2100dp" -->
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="margin_right_correo">50dp</dimen>
+    <dimen name="margin_bottom_correo">75dp</dimen>
+    <dimen name="width_correo">342dp</dimen>
+    <dimen name="height_correo">157dp</dimen>
+
+    <dimen name="margin_right_360">537dp</dimen>
+    <dimen name="margin_bottom_360">75dp</dimen>
+    <dimen name="width_360">342dp</dimen>
+    <dimen name="height_360">157dp</dimen>
+
+    <dimen name="size_circulo_navegacion">75dp</dimen>
+</resources>

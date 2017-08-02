@@ -12,11 +12,11 @@
 
     <ImageView
         android:id="@+id/enviar_correo_btn"
-        android:layout_width="137dp"
-        android:layout_height="63dp"
+        android:layout_width="@dimen/width_correo"
+        android:layout_height="@dimen/height_correo"
         android:src="@drawable/selector_btn_enviar"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginRight="@dimen/margin_right_correo"
+        android:layout_marginBottom="@dimen/margin_bottom_correo"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
 

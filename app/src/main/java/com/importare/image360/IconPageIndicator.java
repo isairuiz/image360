@@ -122,7 +122,8 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
 		int count = iconAdapter.getCount();
 		for (int i = 0; i < count; i++) {
 			ImageView view = new ImageView(getContext(), null, R.attr.vpiIconPageIndicatorStyle);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,80); //CAMBIADO se agregó params para darle ancho/alto y margin a ImageView. Si resource fuera bitmap no sería necesario ancho/alto. Este método es rígido e inapropiado para reuso pues se debería parametrizar margin, ancho, alto y otros atributos para estilizar el ImageView
+			int size_circulo = getResources().getDimensionPixelOffset(R.dimen.size_circulo_navegacion); //CAMBIO se agregó para tener circulos en varios layouts
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size_circulo,size_circulo); //CAMBIADO se agregó params para darle ancho/alto y margin a ImageView. Si resource fuera bitmap no sería necesario ancho/alto. Este método es rígido e inapropiado para reuso pues se debería parametrizar margin, ancho, alto y otros atributos para estilizar el ImageView
 			params.setMargins(20,0,20,0); //CAMBIO para dar separación horizontal
 			view.setImageResource(iconAdapter.getIconResId(i));
 			view.setTag(i); //CAMBIO se agregó este tag para identificar el botón de entre todos

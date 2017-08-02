@@ -1,0 +1,16 @@
+<resources>
+    <!-- Para tabletas de 10" -->
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="margin_right_correo">20dp</dimen>
+    <dimen name="margin_bottom_correo">30dp</dimen>
+    <dimen name="width_correo">137dp</dimen>
+    <dimen name="height_correo">63dp</dimen>
+
+    <dimen name="margin_right_360">215dp</dimen>
+    <dimen name="margin_bottom_360">30dp</dimen>
+    <dimen name="width_360">137dp</dimen>
+    <dimen name="height_360">63dp</dimen>
+
+    <dimen name="size_circulo_navegacion">30dp</dimen>
+</resources>

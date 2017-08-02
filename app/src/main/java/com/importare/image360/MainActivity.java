@@ -425,6 +425,10 @@ public class MainActivity extends AppCompatActivity {
             hacerFullscreen();
     }
 
+    public void msg(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
